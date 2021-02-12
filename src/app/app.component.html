@@ -1,0 +1,56 @@
+<div class="content container">
+
+  <div class="toolbar" role="banner">
+    <img
+      width="40"
+      alt="Angular Logo"
+      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
+    />
+    <span>Inside Track</span>
+    <div class="spacer"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="options">Group By:</label>
+    <div *ngFor="let option of options">
+        <label>
+            <input type="checkbox"
+                   name="options"
+                   value="{{option.value}}"
+                   [(ngModel)]="option.checked"/>
+            {{option.name}}
+        </label>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" (click)="groupRows()" style="margin-bottom:10px;">Group</button>
+
+  <!-- <input type="file" (change)="fileEvent($event)" /> -->
+
+  <mat-table [dataSource]="dataSource" class="table table-bordered">
+
+    <ng-container *ngFor="let column of columns; let i = index" matColumnDef="{{ column.field }}">
+      <mat-header-cell *matHeaderCellDef>{{ column.value }}
+  
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row[column.field] }}</mat-cell>
+    </ng-container>
+  
+    <mat-header-row style="background-color: lightgray;font-weight: bold;word-break: break-word;" mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  
+    <ng-container matColumnDef="groupHeader">
+      <mat-cell colspan="999" *matCellDef="let group">
+        <mat-icon *ngIf="group.expanded">expand_less</mat-icon>
+        <mat-icon *ngIf="!group.expanded">expand_more</mat-icon>
+        <strong>{{groupByColumns[group.level-1]}} = {{group[groupByColumns[group.level-1]]}} ({{group.totalCounts}})</strong>
+        </mat-cell>
+    </ng-container>
+  
+    <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" (click)="groupHeaderClick(row)"> </mat-row>
+  
+  </mat-table>
+
+</div>
+
+<router-outlet></router-outlet>
